@@ -124,4 +124,4 @@ resulting data set and export it to a txt file
     ##ResultData
     ##data <- write.table(ResultData,file = "tidydata.txt")
 
-And thats all. Thanks :3
+And thats all. Hope you liked my work. Thanks :3

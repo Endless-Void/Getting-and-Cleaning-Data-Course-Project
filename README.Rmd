@@ -1,5 +1,5 @@
 ---
-title: "My First R Markdown"
+title: "Getting and Cleaning Data Course Project"
 author: "Giovanny Granados"
 date: "14/06/2020"
 output: 
@@ -124,5 +124,5 @@ To make the desired calculations, we first group the data first by subject and t
 ##data <- write.table(ResultData,file = "tidydata.txt")
 ```
 
-And thats all. Thanks :3 
+And thats all. Hope you liked my work. Thanks :3 
 
