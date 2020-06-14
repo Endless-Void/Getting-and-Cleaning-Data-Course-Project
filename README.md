@@ -122,6 +122,6 @@ resulting data set and export it to a txt file
     ##GroupData <- group_by(OrderedRawData, Subject, Labels)
     ##ResultData <- summarize_all(GroupData, funs(mean, sd))
     ##ResultData
-    ##write.table(ResultData, row.name = FALSE)
+    ##data <- write.table(ResultData,file = "tidydata.txt")
 
 And thats all. Thanks :3
