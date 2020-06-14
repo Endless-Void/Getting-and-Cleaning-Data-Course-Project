@@ -1,0 +1,128 @@
+---
+title: "My First R Markdown"
+author: "Giovanny Granados"
+date: "14/06/2020"
+output: 
+  md_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Getting and Cleaning Data Course Project
+
+In this Markdown document Mwill explain all the process and script to  accomplish the Getting and Cleaning Data Course Project. This code can be seen in the next repo URL in GitHub <https://github.com/Endless-Void/Getting-and-Cleaning-Data-Course-Project>.
+
+## 1. Data Folder
+
+To avoid any error, I rename the Data folder from “UCI HAR Dataset” to “UCI_HAR_Dataset” then we proceed to search the files direction so we can’t make any mistake when we read the txt files.  
+
+```{r fileslecture}
+GeneralFiles <- list.files("./UCI_HAR_Dataset", full.names = TRUE)
+TestFiles <- list.files("./UCI_HAR_Dataset/test", full.names = TRUE)
+TrainFiles <- list.files("./UCI_HAR_Dataset/train", full.names = TRUE)
+```
+
+## 2. Reading Data
+
+Then with the files location we proceed to read them, the test files:
+
+```{r readtestfiles}
+test <- read.table("./UCI_HAR_Dataset/test/X_test.txt", header = TRUE)
+testlabels <- read.table("./UCI_HAR_Dataset/test/y_test.txt", header = TRUE)
+testsubject <- read.table("./UCI_HAR_Dataset/test/subject_test.txt", header = TRUE)
+```
+ 
+and the train files:
+
+```{r readtrainfiles}
+train <- read.table("./UCI_HAR_Dataset/train/X_train.txt", header = TRUE)
+trainlabels <- read.table("./UCI_HAR_Dataset/train/y_train.txt", header = TRUE)
+trainsubject <- read.table("./UCI_HAR_Dataset/train/subject_train.txt", header = TRUE)
+```
+
+## 3. Changing the data labels 
+
+Next we change the values from the labels from 1 to 6, to the real activity names, this for the train and test data:
+
+```{r iftestlabels}
+for (i in 1:nrow(testlabels)) {
+        if (testlabels[i,1] == 1){
+                testlabels[i,1] <- "WALKING"
+        }else if (testlabels[i,1] == 2){
+                testlabels[i,1] <- "WALKING_UPSTAIRS"
+        }else if (testlabels[i,1] == 3){
+                testlabels[i,1] <- "WALKING_DOWNSTAIRS"
+        }else if (testlabels[i,1] == 4){
+                testlabels[i,1] <- "SITTING"
+        }else if (testlabels[i,1] == 5){
+                testlabels[i,1] <- "STANDING"
+        }else if(testlabels[i,1] == 6){
+                testlabels[i,1] <- "LAYING" 
+        }
+}
+```
+
+and for the train data: 
+
+```{r iftrainlabels}
+for (i in 1:nrow(trainlabels)) {
+        if (trainlabels[i,1] == 1){
+                trainlabels[i,1] <- "WALKING"
+        }else if (trainlabels[i,1] == 2){
+                trainlabels[i,1] <- "WALKING_UPSTAIRS"
+        }else if (trainlabels[i,1] == 3){
+                trainlabels[i,1] <- "WALKING_DOWNSTAIRS"
+        }else if (trainlabels[i,1] == 4){
+                trainlabels[i,1] <- "SITTING"
+        }else if (trainlabels[i,1] == 5){
+                trainlabels[i,1] <- "STANDING"
+        }else if(trainlabels[i,1] == 6){
+                trainlabels[i,1] <- "LAYING" 
+        }
+}
+```
+
+At this point we already read all the data we need so we begin to work with these. 
+
+## 4. Making the data tidy 
+
+First, we have to bind the subject, the label and data for the train and test data set. Also, we introduce the names “Subject” and “Labels” in the respective variables: 
+
+
+```{r binds}
+RawTestData <- cbind(testsubject, testlabels, test)
+names(RawTestData)[1:2] <- c("Subject", "Labels")
+RawTrainData <- cbind(trainsubject, trainlabels, train)
+names(RawTrainData)[1:2] <- c("Subject", "Labels")
+```
+
+At this point I assume that the data variables are the same since they have a similar behavior for both test and train data and since according to the "README" file of the data it says "The obtained dataset has been randomly partitioned into two sets , where 70% of the volunteers was selected for generating the training data and 30% the test data" So i save the two original names in case we needed for something and then i use the test names also for the train names, finaly i bind the rows for the two data set so we now have one source data set. 
+
+```{r variablenames}
+OriginalTestNames <- names(test)
+OriginalTrainNames <- names(train)
+names(RawTrainData) <- names(RawTestData)
+RawData <- rbind(RawTestData,RawTrainData)
+```
+
+With one data set, now we can perform the average and standard deviation calculations. But first we use de library "dplyr" to order the data set first by subjects and then by label. 
+
+```{r orderdataset}
+##library(dplyr)
+##OrderedRawData <- arrange(RawData, Subject, Labels)
+```
+
+To make the desired calculations, we first group the data first by subject and then by label or activity, then we can perform our calculations with the `summarize_all` function, before this step we have a **10297 x 563** but when we do the calculations we will have a **10297  x 1124** resulting data set, this is because the `summarize_all` function have to do 2 calculations for the 561 variables in the input data set, so the function will return a data set with (2 * 561) + 2 = 1124 variables, the "+2" variables are the Subject and Label variables we merge from the train and test data sets. Finally, we just print the resulting data set and export it to a txt file
+
+```{r final}
+##GroupData <- group_by(OrderedRawData, Subject, Labels)
+##ResultData <- summarize_all(GroupData, funs(mean, sd))
+##ResultData
+##write.table(ResultData, row.name = FALSE)
+```
+
+And thats all. Thanks :3 
+
