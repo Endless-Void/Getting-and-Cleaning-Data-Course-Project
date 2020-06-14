@@ -63,3 +63,4 @@ OrderedRawData <- arrange(RawData, Subject, Labels)
 GroupData<- group_by(OrderedRawData, Subject, Labels)
 ResultData <- summarize_all(GroupData, funs(mean, sd))
 ResultData
+write.table(ResultData, row.name = FALSE)
