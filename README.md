@@ -23,6 +23,7 @@ can’t make any mistake when we read the txt files.
 Then with the files location we proceed to read them and change the
 names from the data variables, the test files:
 
+    labels <- read.table("./UCI_HAR_Dataset/activity_labels.txt", header = FALSE, col.names = c("LabelsID", "Labels"))
     features <- read.table("./UCI_HAR_Dataset/features.txt", header = FALSE, col.names = c("ActivityID", "Activity"))
     test <- read.table("./UCI_HAR_Dataset/test/X_test.txt", header = TRUE)
     testlabels <- read.table("./UCI_HAR_Dataset/test/y_test.txt", header = TRUE, col.names = c("Activity"))
@@ -42,39 +43,11 @@ and the train files:
 Next we change the values from the labels from 1 to 6, to the real
 activity names, this for the train and test data:
 
-    for (i in 1:nrow(testlabels)) {
-            if (testlabels[i,1] == 1){
-                    testlabels[i,1] <- "WALKING"
-            }else if (testlabels[i,1] == 2){
-                    testlabels[i,1] <- "WALKING_UPSTAIRS"
-            }else if (testlabels[i,1] == 3){
-                    testlabels[i,1] <- "WALKING_DOWNSTAIRS"
-            }else if (testlabels[i,1] == 4){
-                    testlabels[i,1] <- "SITTING"
-            }else if (testlabels[i,1] == 5){
-                    testlabels[i,1] <- "STANDING"
-            }else if(testlabels[i,1] == 6){
-                    testlabels[i,1] <- "LAYING" 
-            }
-    }
+    testlabels$Activity <- labels[testlabels$Activity,2]
 
 and for the train data:
 
-    for (i in 1:nrow(trainlabels)) {
-            if (trainlabels[i,1] == 1){
-                    trainlabels[i,1] <- "WALKING"
-            }else if (trainlabels[i,1] == 2){
-                    trainlabels[i,1] <- "WALKING_UPSTAIRS"
-            }else if (trainlabels[i,1] == 3){
-                    trainlabels[i,1] <- "WALKING_DOWNSTAIRS"
-            }else if (trainlabels[i,1] == 4){
-                    trainlabels[i,1] <- "SITTING"
-            }else if (trainlabels[i,1] == 5){
-                    trainlabels[i,1] <- "STANDING"
-            }else if(trainlabels[i,1] == 6){
-                    trainlabels[i,1] <- "LAYING" 
-            }
-    }
+    trainlabels$Activity <- labels[trainlabels$Activity,2]
 
 At this point we already read all the data we need so we begin to work
 with these.

@@ -10,14 +10,14 @@ test <- read.table("./UCI_HAR_Dataset/test/X_test.txt", header = TRUE)
 testlabels <- read.table("./UCI_HAR_Dataset/test/y_test.txt", header = TRUE, col.names = c("Activity"))
 testsubject <- read.table("./UCI_HAR_Dataset/test/subject_test.txt", header = TRUE, col.names = c("Subject"))
 names(test) <- features$Activity
-## Uses descriptive activity names to name the activities in the test labels data set using an "if" sintax
+## Uses descriptive activity names to name the activities in the test labels data set 
 testlabels$Activity <- labels[testlabels$Activity,2]
 ## Read all relevant files from the train data files and rename with the real names the train data
 train <- read.table("./UCI_HAR_Dataset/train/X_train.txt", header = TRUE)
 trainlabels <- read.table("./UCI_HAR_Dataset/train/y_train.txt", header = TRUE, col.names = c("Activity"))
 trainsubject <- read.table("./UCI_HAR_Dataset/train/subject_train.txt", header = TRUE, col.names = c("Subject"))
 names(train) <- features$Activity
-## Uses descriptive activity names to name the activities in the test labels data set using an "if" sintax
+## Uses descriptive activity names to name the activities in the test labels data set 
 trainlabels$Activity <- labels[trainlabels$Activity,2]
 ##bind the subjects and activities with the test and train data
 RawTestData <- cbind(testsubject, testlabels, test)
