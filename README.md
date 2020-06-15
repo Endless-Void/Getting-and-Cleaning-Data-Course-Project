@@ -20,17 +20,21 @@ can’t make any mistake when we read the txt files.
 2. Reading Data
 ---------------
 
-Then with the files location we proceed to read them, the test files:
+Then with the files location we proceed to read them and change the
+names from the data variables, the test files:
 
+    features <- read.table("./UCI_HAR_Dataset/features.txt", header = FALSE, col.names = c("ActivityID", "Activity"))
     test <- read.table("./UCI_HAR_Dataset/test/X_test.txt", header = TRUE)
-    testlabels <- read.table("./UCI_HAR_Dataset/test/y_test.txt", header = TRUE)
-    testsubject <- read.table("./UCI_HAR_Dataset/test/subject_test.txt", header = TRUE)
+    testlabels <- read.table("./UCI_HAR_Dataset/test/y_test.txt", header = TRUE, col.names = c("Activity"))
+    testsubject <- read.table("./UCI_HAR_Dataset/test/subject_test.txt", header = TRUE, col.names = c("Subject"))
+    names(test) <- features$Activity
 
 and the train files:
 
     train <- read.table("./UCI_HAR_Dataset/train/X_train.txt", header = TRUE)
-    trainlabels <- read.table("./UCI_HAR_Dataset/train/y_train.txt", header = TRUE)
-    trainsubject <- read.table("./UCI_HAR_Dataset/train/subject_train.txt", header = TRUE)
+    trainlabels <- read.table("./UCI_HAR_Dataset/train/y_train.txt", header = TRUE, col.names = c("Activity"))
+    trainsubject <- read.table("./UCI_HAR_Dataset/train/subject_train.txt", header = TRUE, col.names = c("Subject"))
+    names(train) <- features$Activity
 
 3. Changing the data labels
 ---------------------------
@@ -83,45 +87,28 @@ test data set. Also, we introduce the names “Subject” and “Labels” in
 the respective variables:
 
     RawTestData <- cbind(testsubject, testlabels, test)
-    names(RawTestData)[1:2] <- c("Subject", "Labels")
     RawTrainData <- cbind(trainsubject, trainlabels, train)
-    names(RawTrainData)[1:2] <- c("Subject", "Labels")
 
-At this point I assume that the data variables are the same since they
-have a similar behavior for both test and train data and since according
-to the “README” file of the data it says “The obtained dataset has been
-randomly partitioned into two sets , where 70% of the volunteers was
-selected for generating the training data and 30% the test data” So i
-save the two original names in case we needed for something and then i
-use the test names also for the train names, finaly i bind the rows for
-the two data set so we now have one source data set.
+Binds the test and train data set, then we select the columns of
+interest.
 
-    OriginalTestNames <- names(test)
-    OriginalTrainNames <- names(train)
-    names(RawTrainData) <- names(RawTestData)
-    RawData <- rbind(RawTestData,RawTrainData)
-
-With one data set, now we can perform the average and standard deviation
-calculations. But first we use de library “dplyr” to order the data set
-first by subjects and then by label.
-
-    ##library(dplyr)
-    ##OrderedRawData <- arrange(RawData, Subject, Labels)
+    ##RawData<- rbind(RawTestData,RawTrainData)
+    ##RawDataSelected <- select(RawData, Subject, Activity, contains("mean"), contains("std"))
 
 To make the desired calculations, we first group the data first by
 subject and then by label or activity, then we can perform our
 calculations with the `summarize_all` function, before this step we have
-a **10297 x 563** but when we do the calculations we will have a **10297
-x 1124** resulting data set, this is because the `summarize_all`
-function have to do 2 calculations for the 561 variables in the input
-data set, so the function will return a data set with (2 \* 561) + 2 =
-1124 variables, the “+2” variables are the Subject and Label variables
-we merge from the train and test data sets. Finally, we just print the
-resulting data set and export it to a txt file
+a **10297 x 88** but when we do the calculations we will have a **180 x
+174** resulting data set, this is because the `summarize_all` function
+have to do 2 calculations for the 88 variables in the input data set, so
+the function will return a data set with (2 \* 88) + 2 = 174 variables,
+the “+2” variables are the Subject and Label variables we merge from the
+train and test data sets. Finally, we just print the resulting data set
+and export it to a txt file
 
-    ##GroupData <- group_by(OrderedRawData, Subject, Labels)
+    ##GroupData<- group_by(RawDataSelected, Subject, Activity)
     ##ResultData <- summarize_all(GroupData, funs(mean, sd))
-    ##ResultData
-    ##data <- write.table(ResultData,file = "tidydata.txt")
+    ##tbl_df(ResultData)
+    ##data <- write.table(ResultData,file = "tidydata.txt",  row.name=FALSE)
 
 And thats all. Hope you liked my work. Thanks :3

@@ -21,6 +21,9 @@ directories in the test folder.
 **TrainFiles** -&gt; Its a character vector that contains all the data
 directories in the train folder.
 
+**features** -&gt; Its a data frame containning the variable names for
+the test and train data.
+
 **test** -&gt; Its a data frame containning the test data set with a
 dimensions of 2946 x 561.
 
@@ -48,37 +51,26 @@ dimensions of 2946 x 563.
 a dimensions of 7351 x 563.
 
 **Note: For RawTrainData and RawTestData, i change the names for the
-first and second variable for “Subject” and “Labels” Respectively.**
-
-**OriginalTestNames** -&gt; Its a character vector containing the
-variable names of the “test” data frame. this object has a lenght of
-561.
-
-**OriginalTrainNames** -&gt; Its a character vector containing the
-variable names of the “train” data frame. this object has a lenght of
-561.
-
-**Note: After this step, i remplace the names of “RawTrainData” for the
-names of “RawTestData”, for more information see the “README.md” file.**
+first and second column for “Subject” and “Labels” Respectively.**
 
 **RawData** -&gt; Its a data frame resulting from a rbind from
 “RawTestData” and “RawTrainData” in that respective order with a
 dimensions of 10297 x 563.
 
-**OrderedRawData** -&gt; Its a data frame resulting from the “arrange”
-function from the “dplyr” library, ordering first the subject and then
-the label from the “RawData” data frame with a dimensions of 10297 x
-563.
+**RawDataSelected** -&gt; Its a data frame resulting from the “select”
+function from the “dplyr” library, where we only wanna have the
+“Subject”, “Activity” columns and columns that in their name have the
+word “mean” and “std” this data frame with a dimensions of 10297 x 88.
 
 **GroupData** -&gt; Its a data frame with class “tbl\_df” Here i group
 the “OrderedRawData” first by Subject and then by Label so the desired
 calculations are done by this groups. This data frame has dimensions of
-10297 x 563.
+10297 x 88.
 
 **ResultData** Its the resulting data frame with class “tbl\_df” in this
 data frame are done the mean and sd calculations using the
 “summarize\_all” function of the “dplyr” library from the “GroupData”
-data frame. This data frame has a dimension of 180 x 1124.
+data frame. This data frame has a dimension of 180 x 174.
 
 **Note: the dimension of “ResultData” data frame are:**
 
@@ -87,13 +79,13 @@ calculations, the resulting data frame has 6 types of activities and 30
 subjects then there will be 6x30=180 groups that are represeted by
 rows.**
 
-**1124 columns: at the moment that we group our data frame to do the
-calculations, these calculations are two, the mean and the sd so for
+**174 columns: at the moment that we group our data frame to do the
+calculations, these calculations are two, the mean and the std so for
 every column has to do 2 calculations plus the subject and the label
-variables so we will have 561x2 + 2 = 1124 columns.**
+variables so we will have 88x2 + 2 = 174 columns.**
 
 **the names of the columns are the same from the “GroupData” data frame
-but now they have an indicative for the mean or sd calculation.**
+but now they have an indicative for the mean or std calculation.**
 
 **data** -&gt; Stores the data frame exported by the “write.table”
 function using “ResultData” as data source.
