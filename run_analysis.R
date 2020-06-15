@@ -3,9 +3,8 @@ library(dplyr)
 GeneralFiles <- list.files("./UCI_HAR_Dataset", full.names = TRUE)
 TestFiles <- list.files("./UCI_HAR_Dataset/test", full.names = TRUE)
 TrainFiles <- list.files("./UCI_HAR_Dataset/train", full.names = TRUE)
-## Read all relevant files from the test data files
+## Read all relevant files from the test data files and rename with the real names the test data
 features <- read.table("./UCI_HAR_Dataset/features.txt", header = FALSE, col.names = c("ActivityID", "Activity"))
-
 test <- read.table("./UCI_HAR_Dataset/test/X_test.txt", header = TRUE)
 testlabels <- read.table("./UCI_HAR_Dataset/test/y_test.txt", header = TRUE, col.names = c("Activity"))
 testsubject <- read.table("./UCI_HAR_Dataset/test/subject_test.txt", header = TRUE, col.names = c("Subject"))
@@ -26,7 +25,7 @@ for (i in 1:nrow(testlabels)) {
                 testlabels[i,1] <- "LAYING" 
         }
 }
-## Read all relevant files from the train data files
+## Read all relevant files from the train data files and rename with the real names the train data
 train <- read.table("./UCI_HAR_Dataset/train/X_train.txt", header = TRUE)
 trainlabels <- read.table("./UCI_HAR_Dataset/train/y_train.txt", header = TRUE, col.names = c("Activity"))
 trainsubject <- read.table("./UCI_HAR_Dataset/train/subject_train.txt", header = TRUE, col.names = c("Subject"))
@@ -47,18 +46,14 @@ for (i in 1:nrow(trainlabels)) {
                 trainlabels[i,1] <- "LAYING" 
         }
 }
-##bind the subjects and labels with the test and train data
+##bind the subjects and activities with the test and train data
 RawTestData <- cbind(testsubject, testlabels, test)
 RawTrainData <- cbind(trainsubject, trainlabels, train)
-##Here I am assuming that the variables of the test and train data are the same, 
-##which can be supported in the README file that says "The obtained dataset 
-##has been randomly partitioned into two sets, where 70% of the volunteers
-#was selected for generating the training data and 30% the test data"
-#therefore although they have different names, they represent the same
+##bind the train and test data sets 
 RawData<- rbind(RawTestData,RawTrainData)
 RawDataSelected <- select(RawData, Subject, Activity, contains("mean"), contains("std"))
-##
+##Group al the data by their subject and activity so we can perform the mean and std calculation by these groups
 GroupData<- group_by(RawDataSelected, Subject, Activity)
 ResultData <- summarize_all(GroupData, funs(mean, sd))
 tbl_df(ResultData)
-##data <- write.table(ResultData,file = "tidydata.txt")
+data <- write.table(ResultData,file = "tidydata.txt",  row.name=FALSE)
