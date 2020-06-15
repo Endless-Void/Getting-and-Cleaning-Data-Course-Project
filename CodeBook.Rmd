@@ -1,6 +1,6 @@
 ---
 title: "CodeBook"
-author: "Giovanny Granados"
+author: "Gio"
 date: "14/06/2020"
 output: 
   md_document:
@@ -63,5 +63,7 @@ All the variables and data sets presented here, are in order of appearence in th
 
 **data** -> Stores the data frame exported by the "write.table" function using "ResultData" as data source.
 
-And thats all. Hope you liked my work. Thanks :3 
+
+And thats all. Hope you liked my work. Thanks     :3 
+
 

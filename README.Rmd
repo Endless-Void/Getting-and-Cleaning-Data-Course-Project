@@ -1,6 +1,6 @@
 ---
 title: "Getting and Cleaning Data Course Project"
-author: "Giovanny Granados"
+author: "Giovanny"
 date: "14/06/2020"
 output: 
   md_document:
@@ -116,5 +116,7 @@ To make the desired calculations, we first group the data first by subject and t
 ##data <- write.table(ResultData,file = "tidydata.txt",  row.name=FALSE)
 ```
 
-And thats all. Hope you liked my work. Thanks :3 
+
+And thats all. Hope you liked my work. Thanks     :3 
+
 
