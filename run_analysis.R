@@ -57,3 +57,5 @@ GroupData<- group_by(RawDataSelected, Subject, Activity)
 ResultData <- summarize_all(GroupData, funs(mean, sd))
 tbl_df(ResultData)
 data <- write.table(ResultData,file = "tidydata.txt",  row.name=FALSE)
+
+
